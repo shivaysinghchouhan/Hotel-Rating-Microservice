@@ -1,0 +1,5 @@
+package com.notification.service.beans;
+
+public class OrderPlacedEvent {
+
+}

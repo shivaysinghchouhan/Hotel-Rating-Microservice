@@ -1,0 +1,32 @@
+package com.notification.service.configuration;
+
+
+import com.notification.service.beans.OrderPlacedEvent;
+import com.notification.service.email.service.EmailService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.messaging.MessagingException;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.stereotype.Component;
+
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public class OrderPlacedListener {
+
+    private final EmailService emailService;
+
+    @KafkaListener(topics = "order.placed.v1", groupId = "notification-service")
+    public void handle(@Payload OrderPlacedEvent event) {
+        log.info("📩 Received OrderPlacedEvent: {}", event);
+
+        try {
+            emailService.sendOrderConfirmation(event, "singhchouhan965@gmail.com");
+            log.info("✅ Email sent successfully for Order {}", event.getOrderId());
+        } catch (MessagingException e) {
+            log.error("❌ Failed to send email for Order {}: {}", event.getOrderId(), e.getMessage(), e);
+        }
+    }
+}

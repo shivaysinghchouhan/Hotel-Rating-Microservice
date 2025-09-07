@@ -1,0 +1,51 @@
+package com.order.service.controller;
+
+//package com.example.controller;
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.web.bind.annotation.*;
+
+import com.order.service.beans.OrderPlacedEvent;
+import com.order.service.beans.OrderPlacedEvent.Item;
+import com.order.service.kafka.service.OrderEventProducer;
+
+import java.math.BigDecimal;
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/orders")
+public class OrderController {
+
+ private final OrderEventProducer producer;
+
+ @PostMapping("/place")
+ public String placeOrder(@RequestParam String userId) {
+	 
+	 String orderId = "ORD-" + UUID.randomUUID();
+            OrderPlacedEvent event = OrderPlacedEvent.builder()
+	        .eventVersion("1.0")
+	        .eventType("ORDER_PLACED")
+	        .orderId(orderId)
+	        .userId(userId)
+	        .amount(new BigDecimal("1499.00"))
+	        .currency("INR")
+	        .items(Arrays.asList(   // ✅ Java 8 compatible
+	                Item.builder()
+	                        .sku("HOTEL-DELUXE-3N")
+	                        .qty(1)
+	                        .price(new BigDecimal("1499.00"))
+	                        .build()
+	        ))
+	        .createdAt(Instant.now())
+	        .traceId(UUID.randomUUID().toString())
+	        .build();
+
+	         producer.publish(event);
+	return "Order placed and event published: " + orderId;
+}
+}
+

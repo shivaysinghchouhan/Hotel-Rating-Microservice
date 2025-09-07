@@ -1,0 +1,5 @@
+package com.notification.service.kafka.service;
+
+public class OrderEventProducer {
+
+}

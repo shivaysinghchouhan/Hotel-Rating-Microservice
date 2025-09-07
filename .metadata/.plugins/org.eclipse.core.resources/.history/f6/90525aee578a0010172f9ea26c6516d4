@@ -1,0 +1,26 @@
+package com.notification.service.configuration;
+
+
+import com.notification.service.beans.OrderPlacedEvent;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.stereotype.Component;
+
+@Slf4j
+@Component
+public class OrderPlacedListener {
+
+    // Kafka Listener जो "order.placed.v1" topic को listen करेगा
+    @KafkaListener(topics = "order.placed.v1", groupId = "notification-service")
+    public void handle(@Payload OrderPlacedEvent event) {
+        log.info("Received OrderPlacedEvent: {}", event);
+
+        // यहाँ notification logic implement करो (Email/SMS/Push)
+        // Example:
+        // emailService.sendOrderConfirmation(event.getUserId(), event.getOrderId());
+
+        // Demo में fail करवाना हो तो exception throw कर सकते हैं
+        // if (event.getOrderId().endsWith("BAD")) throw new RuntimeException("Simulated failure");
+    }
+}

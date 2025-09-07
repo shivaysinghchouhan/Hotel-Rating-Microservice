@@ -1,0 +1,30 @@
+package com.notification.service.configuration;
+
+//package com.example.kafka;
+import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.stereotype.Component;
+
+import com.notification.service.beans.OrderPlacedEvent;
+
+@Component
+@Slf4j
+public class OrderPlacedListener {
+
+    // Property inject करो
+    @Value("${app.kafka.topic.orderPlaced}")
+    private String topicName;
+
+    @KafkaListener(topics = "${app.kafka.topic.orderPlaced}", groupId = "notification-service")
+    public void handle(@Payload OrderPlacedEvent event) {
+        // अब तुम्हें topicName variable का भी use कर सकते हो
+        log.info("Kafka topic name used: {}", topicName);
+        log.info("Received OrderPlacedEvent: {}", event);
+
+        // Notification logic यहाँ डालो
+        // e.g., emailService.sendOrderConfirmation(event.getUserId(), event.getOrderId());
+    }
+}

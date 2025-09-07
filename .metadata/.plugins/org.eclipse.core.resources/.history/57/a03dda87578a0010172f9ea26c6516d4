@@ -1,0 +1,50 @@
+# -----------------------------
+# Global Custom Topics
+# -----------------------------
+app.kafka.topic.orderPlaced=order.placed.v1
+app.kafka.topic.dlt=order.placed.v1.dlt
+
+# -----------------------------
+# Service Info
+# -----------------------------
+spring.application.name=notification-service
+server.port=8087
+
+# -----------------------------
+# Eureka Client Configuration
+# -----------------------------
+eureka.client.register-with-eureka=true
+eureka.client.fetch-registry=true
+eureka.instance.prefer-ip-address=true
+
+# -----------------------------
+# Actuator Endpoints
+# -----------------------------
+management.endpoints.web.exposure.include=*
+management.endpoint.info.enabled=true
+management.endpoint.shutdown.enabled=true
+
+# -----------------------------
+# Kafka Configuration
+# -----------------------------
+spring.kafka.consumer.group-id=notification-service
+spring.kafka.consumer.key-deserializer=org.apache.kafka.common.serialization.StringDeserializer
+spring.kafka.consumer.value-deserializer=org.springframework.kafka.support.serializer.JsonDeserializer
+spring.kafka.consumer.properties.spring.json.trusted-packages=*
+spring.kafka.consumer.properties.spring.json.value.default.type=com.notification.service.beans.OrderPlacedEvent
+spring.kafka.listener.ack-mode=record
+spring.kafka.admin.auto-create=true
+
+# -----------------------------
+# Local Profile
+# -----------------------------
+spring.config.activate.on-profile=local
+spring.kafka.bootstrap-servers=localhost:9092
+eureka.client.service-url.defaultZone=http://localhost:8761/eureka
+
+# -----------------------------
+# Docker Profile
+# -----------------------------
+#spring.config.activate.on-profile=docker
+#spring.kafka.bootstrap-servers=kafka:9092
+#eureka.client.service-url.defaultZone=http://eureka-server:8761/eureka

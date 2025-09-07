@@ -1,0 +1,8 @@
+com\notification\service\configuration\OrderPlacedListener.class
+com\notification\service\NotificationServiceApplication.class
+com\notification\service\email\service\EmailService.class
+com\notification\service\beans\OrderPlacedEvent$OrderPlacedEventBuilder.class
+com\notification\service\beans\OrderPlacedEvent.class
+com\notification\service\beans\OrderPlacedEvent$Item$ItemBuilder.class
+com\notification\service\beans\OrderPlacedEvent$Item.class
+com\notification\service\configuration\KafkaConsumerConfig.class

@@ -1,0 +1,56 @@
+package com.notification.service.email.service;
+
+import com.notification.service.beans.OrderPlacedEvent;
+import lombok.RequiredArgsConstructor;
+
+import javax.mail.internet.MimeMessage;
+
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.messaging.MessagingException;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class EmailService {
+
+    private final JavaMailSender mailSender;
+
+    public void sendOrderConfirmation(OrderPlacedEvent event, String toEmail) throws MessagingException {
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper=null;
+        try {
+        	helper = new MimeMessageHelper(message, true);
+            helper.setTo(toEmail);
+			helper.setSubject("✅ Order Confirmation - " + event.getOrderId());
+		} catch (javax.mail.MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+        String body = "<h2>Order Confirmation</h2>"
+                + "<p>Dear User <b>" + event.getUserId() + "</b>,</p>"
+                + "<p>Thank you for your order.</p>"
+                + "<p><b>Order ID:</b> " + event.getOrderId() + "</p>"
+                + "<p><b>Amount:</b> " + event.getAmount() + " " + event.getCurrency() + "</p>"
+                + "<p><b>Items:</b></p><ul>";
+
+        for (OrderPlacedEvent.Item item : event.getItems()) {
+            body += "<li>" + item.getSku() + " - Qty: " + item.getQty() + " - Price: " + item.getPrice() + "</li>";
+        }
+
+        body += "</ul><p>Order Date: " + event.getCreatedAt() + "</p>"
+                + "<br><p>Trace ID: " + event.getTraceId() + "</p>"
+                + "<p>We will notify you once your order is shipped.</p>"
+                + "<br><p>Regards,<br><b>Order Support Team</b></p>";
+
+        try {
+			helper.setText(body, true);
+		} catch (javax.mail.MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+        mailSender.send(message);
+    }
+}

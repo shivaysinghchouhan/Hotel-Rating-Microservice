@@ -1,0 +1,26 @@
+package com.order.service.kafka.service;
+
+//package com.example.kafka;
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Service;
+
+import com.order.service.beans.OrderPlacedEvent;
+
+@Service
+@RequiredArgsConstructor
+public class OrderEventProducer {
+
+ private final KafkaTemplate<String, OrderPlacedEvent> kafkaTemplate;
+
+ @Value("${app.kafka.topic.orderPlaced}")
+ private String topic;
+
+ public void publish(OrderPlacedEvent event) {
+     String key = event.getOrderId();
+     kafkaTemplate.send(topic, key, event);
+ }
+}
+
