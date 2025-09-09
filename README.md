@@ -1,6 +1,6 @@
 # Hotel-Rating-Microservice
 
-**Author:** Singh Chouhan (singhchouhan965)  
+**Author:**Shivraj Singh Chouhan 
 **GitHub:** [shivaysinghchouhan](https://github.com/shivaysinghchouhan)  
 
 **Project Type:** Microservices Architecture  
@@ -55,4 +55,4 @@ This project is a **Hotel Review and Rating System**. Users can submit reviews a
 ### Steps to Run
 1. Clone the repository:
    ```bash
-   git clone https://github.com/shivaysinghchouhan/Hotel-Rating-Microservice.git
+      https://github.com/shivaysinghchouhan/Hotel-Rating-Microservice.git
